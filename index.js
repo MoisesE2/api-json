@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const port = 3008;
 
 const corsOptions = {
   origin: '*',
@@ -19,6 +20,6 @@ app.get('/', (req, res) => {
   res.send('API com JSON como banco de dados!');
 });
 
-app.listen( () => {
-  console.log(`Servidor rodando:`);
+app.listen(port, () => {
+  console.log(Servidor rodando: http://localhost:${port});
 });
