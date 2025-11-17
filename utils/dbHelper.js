@@ -9,7 +9,7 @@ const readDB = () => {
     return JSON.parse(data);
   } catch (err) {
     console.error('Erro ao ler DB:', err);
-    return { items: [] };
+    return { portfolio: [], items: [] };
   }
 };
 

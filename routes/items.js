@@ -5,14 +5,15 @@ const { readDB, writeDB } = require('../utils/dbHelper');
 
 router.get('/', (req, res) => {
   const db = readDB();
-  res.json(db.items);
+  res.json(db.portfolio || db.items || []);
 });
 
 
 router.get('/:id', (req, res) => { 
   const db = readDB();
   const id = parseInt(req.params.id);
-  const item = db.items.find(i => i.id === id);
+  const items = db.portfolio || db.items || [];
+  const item = items.find(i => i.id === id);
   
   if (!item) return res.status(404).json({ message: 'Item não encontrado' });
   res.json(item);
@@ -26,7 +27,14 @@ router.post('/', (req, res) => {
     ...req.body
   };
   
-  db.items.push(newItem);
+  // Suporta tanto 'portfolio' quanto 'items' para compatibilidade
+  if (db.portfolio) {
+    db.portfolio.push(newItem);
+  } else {
+    if (!db.items) db.items = [];
+    db.items.push(newItem);
+  }
+  
   writeDB(db);
   res.status(201).json(newItem);
 });
@@ -35,28 +43,44 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   const db = readDB();
   const id = parseInt(req.params.id);
-  const index = db.items.findIndex(i => i.id === id);
+  const items = db.portfolio || db.items || [];
+  const index = items.findIndex(i => i.id === id);
   
   if (index === -1) {
     return res.status(404).json({ message: 'Item não encontrado' });
   }
   
- 
-  db.items[index] = { ...db.items[index], ...req.body, id };
+  items[index] = { ...items[index], ...req.body, id };
+  
+  // Atualizar a propriedade correta
+  if (db.portfolio) {
+    db.portfolio = items;
+  } else {
+    db.items = items;
+  }
+  
   writeDB(db);
-  res.json(db.items[index]);
+  res.json(items[index]);
 });
 
 
 router.delete('/:id', (req, res) => { 
   const db = readDB();
   const id = parseInt(req.params.id);
-  const initialLength = db.items.length;
+  const items = db.portfolio || db.items || [];
+  const initialLength = items.length;
   
-  db.items = db.items.filter(i => i.id !== id);
+  const filteredItems = items.filter(i => i.id !== id);
   
-  if (db.items.length === initialLength) {
+  if (filteredItems.length === initialLength) {
     return res.status(404).json({ message: 'Item não encontrado' });
+  }
+  
+  // Atualizar a propriedade correta
+  if (db.portfolio) {
+    db.portfolio = filteredItems;
+  } else {
+    db.items = filteredItems;
   }
   
   writeDB(db);
