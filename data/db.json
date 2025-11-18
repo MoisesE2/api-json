@@ -61,6 +61,27 @@
         ],
         "category": "fullstack",
         "featured": true
+    },
+    {
+        "id": 4,
+        "title": "Medidor de Arrecadação",
+        "imageUrl": "/assets/images/termometro.png",
+        "description": "Projeto desenvolvido para a Igreja Presbiteriana do Farol, para ajudar em uma campanha para arrecadas fundos para a compra do anexo da igreja",
+        "videoUrl": "/assets/videos/termometro.mp4",
+        "githubUrl": "https://github.com/MoisesE2/Termometro-ipf",
+        "liveUrl": "https://ipbfarol.org/",
+        "technologies": [
+            "Next.js",
+            "Tailwindcss",
+            "Typescript",
+            "Node.js",
+            "API",
+            "GitHub",
+            "Figma",
+            "Docker"
+        ],
+        "category": "fullstack",
+        "featured": true
     }
 ]
 }
